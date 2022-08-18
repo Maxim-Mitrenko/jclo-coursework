@@ -18,7 +18,7 @@ public class RepositoryTest {
 
     @Test
     public void addGetTest() {
-        var transfer = new Transfer("12345678901234456", "1223", "315", "0987654321098765", new Amount(1, "RUB"));
+        var transfer = new Transfer("12345678901234456", "12/25", "315", "0987654321098765", new Amount(1, "RUB"));
         repository.add(transfer);
         Assertions.assertEquals(transfer, repository.get(transfer.getOperationId()));
     }

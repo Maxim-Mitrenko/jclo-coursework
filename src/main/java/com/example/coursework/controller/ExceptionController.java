@@ -51,7 +51,7 @@ public class ExceptionController {
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
 
-    @ExceptionHandler(StringIndexOutOfBoundsException.class)
+    @ExceptionHandler(ArrayIndexOutOfBoundsException.class)
     public ResponseEntity<ErrorTransferResponse> wrongFormatDate(StringIndexOutOfBoundsException e) {
         log.error(e + "Неверный формат даты");
         var response = new ErrorTransferResponse(e.getMessage(), 400);

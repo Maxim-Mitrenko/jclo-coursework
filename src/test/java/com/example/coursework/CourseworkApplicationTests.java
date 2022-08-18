@@ -32,32 +32,32 @@ class CourseworkApplicationTests {
 
     @Test
     public void goodTransferTest() throws URISyntaxException {
-        var transfer = new Transfer("1234567890123456", "0123", "982", "0987654321098765", new Amount(100, "RUB"));
+        var transfer = new Transfer("1234567890123456", "01/25", "982", "0987654321098765", new Amount(100, "RUB"));
         var entity = testRestTemplate.postForEntity(new URI("http://localhost:" + app.getMappedPort(5500) + "/transfer"), transfer, String.class);
         Assertions.assertEquals(HttpStatus.OK, entity.getStatusCode());
     }
 
     @Test
     public void badNumberFromCardTest() throws URISyntaxException {
-        var transfer = new Transfer("1", "0123", "982", "0987654321098765", new Amount(100, "RUB"));
+        var transfer = new Transfer("1", "01/25", "982", "0987654321098765", new Amount(100, "RUB"));
         badTransfer(transfer);
     }
 
     @Test
     public void badCVVTest() throws URISyntaxException {
-        var transfer = new Transfer("1234567890123456", "0123", "-", "0987654321098765", new Amount(100, "RUB"));
+        var transfer = new Transfer("1234567890123456", "01/25", "-", "0987654321098765", new Amount(100, "RUB"));
         badTransfer(transfer);
     }
 
     @Test
     public void badNumberToCardTest() throws URISyntaxException {
-        var transfer = new Transfer("1234567890123456", "0123", "982", "0", new Amount(100, "RUB"));
+        var transfer = new Transfer("1234567890123456", "01/25", "982", "0", new Amount(100, "RUB"));
         badTransfer(transfer);
     }
 
     @Test
     public void badSumTest() throws URISyntaxException {
-        var transfer = new Transfer("1234567890123456", "0123", "982", "0987654321098765", new Amount(-1, "RUB"));
+        var transfer = new Transfer("1234567890123456", "01/25", "982", "0987654321098765", new Amount(-1, "RUB"));
         badTransfer(transfer);
     }
 

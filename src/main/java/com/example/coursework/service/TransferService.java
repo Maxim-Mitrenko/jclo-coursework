@@ -21,16 +21,16 @@ public class TransferService {
 
     public SuccessTransferResponse transfer(Transfer transfer) {
         repository.add(transfer);
-        log.info("Платеж " + transfer + " создан. Необходимо подтверждение по смс");
+        log.info("Платеж " + transfer + " создан. Необходимо подтверждение!");
         return new SuccessTransferResponse(transfer.getOperationId());
     }
 
     public SuccessTransferResponse confirmOperation(Confirmation confirmation) {
         var pay = repository.get(confirmation.getOperationId());
-        if (pay == null) throw new TransferNotFoundException("Перевод " + confirmation.getOperationId() + " не найден");
-        if (Status.COMPLETED.equals(pay.getStatus())) throw new IllegalStateException("Перевод " + pay + " уже подтвержден и выполнен");
+        if (pay == null) throw new TransferNotFoundException("Перевод " + confirmation.getOperationId() + " не найден!");
+        if (Status.COMPLETED.equals(pay.getStatus())) throw new IllegalStateException("Перевод " + pay + " уже подтвержден и выполнен!");
         pay.completed(confirmation);
-        log.info("Платёж " + pay + " был подтверждён по смс и успешно выполнен");
+        log.info("Платёж " + pay + " был подтверждён и успешно выполнен!");
         return new SuccessTransferResponse(pay.getOperationId());
     }
 }

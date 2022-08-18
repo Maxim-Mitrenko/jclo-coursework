@@ -5,6 +5,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.YearMonth;
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -15,7 +17,7 @@ public class Transfer {
     @Size(min = 16, max = 16)
     @NotBlank
     private final String cardFromNumber;
-    @Size(min = 4, max = 4)
+    @Size(min = 5, max = 5)
     @NotBlank
     private final String cardFromValidTill;
     @Size(min = 3, max = 3)
@@ -43,7 +45,8 @@ public class Transfer {
             Amount amount) {
         this.cardFromNumber = cardFromNumber;
         var yearMonth = YearMonth.now();
-        var yearMonthEndCard = YearMonth.of(Integer.parseInt("20" + cardFromValidTill.substring(2)), Integer.parseInt(cardFromValidTill.substring(0, 2)));
+        var monthAndYear = cardFromValidTill.split("/");
+        var yearMonthEndCard = YearMonth.of(Integer.parseInt(String.valueOf(yearMonth.getYear()).substring(0, 2) + monthAndYear[1]), Integer.parseInt(monthAndYear[0]));
         if (yearMonth.isAfter(yearMonthEndCard)) throw new IllegalArgumentException("Срок действия карты истек");
         this.cardFromValidTill = cardFromValidTill;
         this.cardFromCVV = cardFromCVV;
@@ -85,7 +88,10 @@ public class Transfer {
 
     @Override
     public String toString() {
-        return cardFromNumber + " to " + cardToNumber + " " + amount;
+        StringBuilder sb = new StringBuilder();
+        var commission = new BigDecimal(amount.getValue()).divide(new BigDecimal(100), 2, RoundingMode.DOWN);
+        sb.append(cardFromNumber).append(" to ").append(cardToNumber).append(" ").append(amount).append("комиссия ").append(commission);
+        return sb.toString();
     }
 
     @Override
