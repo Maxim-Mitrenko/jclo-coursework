@@ -5,8 +5,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
-import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.time.YearMonth;
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -88,10 +86,7 @@ public class Transfer {
 
     @Override
     public String toString() {
-        StringBuilder sb = new StringBuilder();
-        var commission = new BigDecimal(amount.getValue()).divide(new BigDecimal(100), 2, RoundingMode.DOWN);
-        sb.append(cardFromNumber).append(" to ").append(cardToNumber).append(" ").append(amount).append("комиссия ").append(commission);
-        return sb.toString();
+        return cardFromNumber + " to " + cardToNumber + " " + amount + " комиссия " + amount.getCommission() + " " + amount.getCurrency();
     }
 
     @Override
